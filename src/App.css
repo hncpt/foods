@@ -1,0 +1,33 @@
+.header {
+  font-size: 20px !important;
+  color: white !important;
+}
+
+.bill-title {
+  text-align: center;
+  padding: 16px;
+}
+
+.MuiAppBar-colorPrimary {
+  background-color: red !important;
+}
+.hotline {
+  font-weight: 500;
+}
+
+.main-bill {
+  height: 700px;
+  overflow-y: scroll;
+}
+
+.style-card {
+  height: 700px;
+  overflow-y: scroll;
+}
+ 
+body {
+  background-color: rgb(38, 52, 56);
+}
+/* .app-bar {
+  height: 50px !important;
+} */
