@@ -1,90 +1,100 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import React, { useContext } from 'react'
+import { ProductsContext } from '../App'
 
-const TAX_RATE = 0.07;
+import { makeStyles } from '@material-ui/core/styles'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableContainer from '@material-ui/core/TableContainer'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+import Paper from '@material-ui/core/Paper'
+import IconButton from '@material-ui/core/IconButton'
+import BackspaceIcon from '@material-ui/icons/Backspace'
+
+const TAX_RATE = 0.07
 
 const useStyles = makeStyles({
   table: {
     minWidth: 'unset',
+    minHeight: '200px',
   },
-});
+})
 
-function ccyFormat(num) {
-  return `${num.toFixed(2)}`;
-}
+export default function SpanningTable({ rows }) {
+  const classes = useStyles()
+  const { dispatch } = useContext(ProductsContext)
 
-function priceRow(qty, unit) {
-  return qty * unit;
-}
+  function format1(n, currency) {
+    return (
+      currency +
+      n.toFixed().replace(/./g, function (c, i, a) {
+        return i > 0 && c !== '.' && (a.length - i) % 3 === 0 ? ',' + c : c
+      })
+    )
+  }
 
-function createRow(desc, qty, unit) {
-  const price = priceRow(qty, unit);
-  return { desc, qty, unit, price };
-}
+  function subtotal(items) {
+    return items.map(({ sub }) => sub).reduce((sum, i) => sum + i, 0)
+  }
 
-function subtotal(items) {
-  return items.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
-}
-
-const rows = [
-  createRow('Paperclips (Box)', 100, 1.15),
-  createRow('Paper (Case)', 10, 45.99),
-  createRow('Waste Basket', 2, 17.99),
-];
-
-const invoiceSubtotal = subtotal(rows);
-const invoiceTaxes = TAX_RATE * invoiceSubtotal;
-const invoiceTotal = invoiceTaxes + invoiceSubtotal;
-
-export default function SpanningTable() {
-  const classes = useStyles();
+  const invoiceSubtotal = subtotal(rows)
+  const invoiceTaxes = TAX_RATE * invoiceSubtotal
+  const invoiceTotal = invoiceTaxes + invoiceSubtotal
 
   return (
     <TableContainer component={Paper}>
-      <Table size='small' className={classes.table} aria-label="spanning table">
+      <Table size='small' className={classes.table} aria-label='spanning table'>
         <TableHead>
           <TableRow>
             <TableCell>Desc</TableCell>
-            <TableCell align="right">Kg</TableCell>
-            <TableCell align="right">Price</TableCell>
-            <TableCell align="right">Sub</TableCell>
-            <TableCell align="right">Del</TableCell>
+            <TableCell align='right'>Kg</TableCell>
+            <TableCell align='right'>Price</TableCell>
+            <TableCell align='right'>Sub</TableCell>
+            <TableCell align='right'>Del</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.desc}>
-              <TableCell>{row.desc}</TableCell>
-              <TableCell align="right">{row.qty}</TableCell>
-              <TableCell align="right">{row.unit}</TableCell>
-              <TableCell align="right">{ccyFormat(row.price)}</TableCell>
-              <TableCell align="right">{ccyFormat(row.price)}</TableCell>
-            </TableRow>
-          ))}
+          {rows.map((row) => {
+            return (
+              <TableRow key={row.id}>
+                <TableCell>{row.desc}</TableCell>
+                <TableCell align='right'>{row.kg}</TableCell>
+                <TableCell align='right'>{format1(row.price, 'đ')}</TableCell>
+                <TableCell align='right'>{format1(row.sub, 'đ')}</TableCell>
+                <TableCell align='right'>
+                  <IconButton
+                    size='small'
+                    onClick={() => {
+                      dispatch({
+                        type: 'REMOVE_PRODUCT',
+                        payload: row.id,
+                      })
+                    }}
+                  >
+                    <BackspaceIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            )
+          })}
 
           <TableRow>
             <TableCell rowSpan={3} />
             <TableCell colSpan={2}>Subtotal</TableCell>
-            <TableCell align="right">{ccyFormat(invoiceSubtotal)}</TableCell>
+            <TableCell align='right'>{format1(invoiceSubtotal, 'đ')}</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>Tax</TableCell>
-            <TableCell align="right">{`${(TAX_RATE * 100).toFixed(0)} %`}</TableCell>
-            <TableCell align="right">{ccyFormat(invoiceTaxes)}</TableCell>
+            <TableCell>Additional Expense:</TableCell>
+            <TableCell align='right'></TableCell>
+            <TableCell align='right'>đ0</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell colSpan={2}>Total</TableCell>
-            <TableCell align="right">{ccyFormat(invoiceTotal)}</TableCell>
+            <TableCell colSpan={2}>Produce Total (Approximate):</TableCell>
+            <TableCell align='right'>{format1(invoiceTotal, 'đ')}</TableCell>
           </TableRow>
         </TableBody>
       </Table>
     </TableContainer>
-  );
+  )
 }

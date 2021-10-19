@@ -1,3 +1,7 @@
+body {
+  background-color: rgb(38, 52, 56);
+}
+
 .header {
   font-size: 20px !important;
   color: white !important;
@@ -11,23 +15,39 @@
 .MuiAppBar-colorPrimary {
   background-color: red !important;
 }
+
 .hotline {
   font-weight: 500;
 }
 
+.grid-item-one {
+  padding-right: 1rem;
+  position: fixed;
+  top: 70px;
+  left: 10px;
+}
+
+.grid-item-two {
+  position: absolute;
+  top: 70px;
+  right: 10px;
+}
+
 .main-bill {
-  height: 700px;
+  height: 800px;
   overflow-y: scroll;
 }
 
-.style-card {
-  height: 700px;
-  overflow-y: scroll;
+.style-card>div {
+  margin-right: .5rem;
 }
- 
-body {
-  background-color: rgb(38, 52, 56);
+
+@media (min-width: 1280px) and (max-width: 1919.9px) {
+  .grid-item-one {
+    left: 0;
+  }
+
+  .grid-item-two {
+    right: 0;
+  }
 }
-/* .app-bar {
-  height: 50px !important;
-} */
