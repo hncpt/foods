@@ -12,12 +12,10 @@ import Paper from '@material-ui/core/Paper'
 import IconButton from '@material-ui/core/IconButton'
 import BackspaceIcon from '@material-ui/icons/Backspace'
 
-const TAX_RATE = 0.07
-
 const useStyles = makeStyles({
   table: {
     minWidth: 'unset',
-    minHeight: '200px',
+    minHeight: '250px',
   },
 })
 
@@ -39,8 +37,6 @@ export default function SpanningTable({ rows }) {
   }
 
   const invoiceSubtotal = subtotal(rows)
-  const invoiceTaxes = TAX_RATE * invoiceSubtotal
-  const invoiceTotal = invoiceTaxes + invoiceSubtotal
 
   return (
     <TableContainer component={Paper}>
@@ -54,7 +50,7 @@ export default function SpanningTable({ rows }) {
             <TableCell align='right'>Del</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
+        <TableBody className='table-body-style'>
           {rows.map((row) => {
             return (
               <TableRow key={row.id}>
@@ -79,20 +75,17 @@ export default function SpanningTable({ rows }) {
             )
           })}
 
-          <TableRow>
-            <TableCell rowSpan={3} />
-            <TableCell colSpan={2}>Subtotal</TableCell>
-            <TableCell align='right'>{format1(invoiceSubtotal, 'đ')}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Additional Expense:</TableCell>
-            <TableCell align='right'></TableCell>
-            <TableCell align='right'>đ0</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell colSpan={2}>Produce Total (Approximate):</TableCell>
-            <TableCell align='right'>{format1(invoiceTotal, 'đ')}</TableCell>
-          </TableRow>
+          {rows.length > 0 ? (
+            <TableRow>
+              <TableCell colSpan={2} />
+              <TableCell colSpan={2}>
+                <strong>Subtotal</strong>
+              </TableCell>
+              <TableCell align='right'>
+                <strong>{format1(invoiceSubtotal, 'đ')}</strong>
+              </TableCell>
+            </TableRow>
+          ) : null}
         </TableBody>
       </Table>
     </TableContainer>

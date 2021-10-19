@@ -15,6 +15,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import data from './data'
 
 import './App.css'
+import Logo from './assets/img/logo.jpg'
 
 export const ProductsContext = React.createContext()
 
@@ -71,7 +72,6 @@ const reducer = (state, action) => {
 
 function App() {
   const [product, dispatch] = useReducer(reducer, initialState)
-  console.log(product)
 
   return (
     <ProductsContext.Provider value={{ product, dispatch }}>
@@ -98,19 +98,30 @@ function App() {
           >
             <Box mt={2} className='main-bill'>
               <Paper elevation={3} className='bill-title'>
-                <Typography variant='h6'>POLVIET FOODS AND DRINKS </Typography>
-                <Typography variant='p' component='p'>
-                  Facebook.com/polvietfoodsanddrinks
-                </Typography>
-                <Typography variant='p' component='p'>
-                  Fesh-Delivery-Good Price
-                </Typography>
-                <Typography variant='p' component='p' className='hotline'>
-                  Hotline: 0903344921 (Mr. Mac) - English
-                </Typography>
-                <Typography variant='p' component='p' className='hotline'>
-                  Hotline: 0903737373 (Mrs. Tuyen) - Vietnamese
-                </Typography>
+                <Grid container>
+                  <Grid lg={3} xl={3} className='logo'>
+                    <div>
+                      <img src={Logo} alt='logo' />
+                    </div>
+                  </Grid>
+                  <Grid lg={9} xl={9}>
+                    <Typography variant='h6'>
+                      POLVIET FOODS AND DRINKS{' '}
+                    </Typography>
+                    <Typography variant='p' component='p'>
+                      Facebook.com/polvietfoodsanddrinks
+                    </Typography>
+                    <Typography variant='p' component='p'>
+                      Fesh-Delivery-Good Price
+                    </Typography>
+                    <Typography variant='p' component='p' className='hotline'>
+                      Hotline: 0903344921 (Mr. Mac) - English
+                    </Typography>
+                    <Typography variant='p' component='p' className='hotline'>
+                      Hotline: 0903737373 (Mrs. Tuyen) - Vietnamese
+                    </Typography>
+                  </Grid>
+                </Grid>
 
                 <Box mt={2}>
                   <TextField
